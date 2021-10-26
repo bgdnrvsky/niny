@@ -29,11 +29,11 @@ Extension *".nn"*
 	    dup
 
 	    push 0
-	    =
+	    ==
 
 	    swp
 	    push 1
-	    =
+	    ==
 
 	    or
 	    not
@@ -70,7 +70,7 @@ Extension *".nn"*
 	macro loop do
 	    dup
 	    push 1
-	    =
+	    ==
 	    not
 	    if do y
 	end
@@ -98,7 +98,7 @@ Extension *".nn"*
 	    dup
 	    push 1
 
-	    =
+	    ==
 	    not
 
 	    if do y
