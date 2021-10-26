@@ -353,6 +353,7 @@ Extension *".nn"*
       $ ~
 
 - Command **"inp"** for **taking user input**, **appends the result to end of the stack**.
+
 - Command **"full"** for **printing full stack**.
 
   *Note: prints "[]" if stack is empty*.
@@ -367,6 +368,32 @@ Extension *".nn"*
       $ 1
       $ 2
       $ 3
+
+- Command **"rev"** for **reversing a stack**.
+
+*Example:*
+
+      push 1
+      push 2
+      push 3
+      full
+
+      push "\n"
+      dump
+
+      rev
+      full
+      $ OUT:
+      $ 1
+      $ 2
+      $ 3
+      $
+      $ 3
+      $ 2
+      $ 1
+
+- Commands **"int", "float", "bool", "str"** for **typecasting**, **requires at
+  least 1 element in stack**.
 
 - Command **"swp"** for **changing places of last 2 elements**, **requires at least 2 elements in stack**.
 
