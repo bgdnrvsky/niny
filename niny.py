@@ -28,7 +28,32 @@ commands = {
     "get": "getVal(line)",
     "swp": "swp()",
     "macro": "macro()",
+    "rev": "reverse()",
+    "int": "typecastInt()",
+    "bool": "typecastBool()",
+    "float": "typecastFloat()",
+    "string": "typecastString()",
 }
+
+
+def typecastInt():
+    global stack
+    stack[-1] = int(stack[-1])
+
+
+def typecastBool():
+    global stack
+    stack[-1] = bool(stack[-1])
+
+
+def typecastFloat():
+    global stack
+    stack[-1] = float(stack[-1])
+
+
+def typecastString():
+    global stack
+    stack[-1] = str(stack[-1])
 
 
 def library(index):
@@ -72,6 +97,11 @@ def cat(path):
         result += line
 
     return result
+
+
+def reverse():
+    global stack
+    stack = stack[::-1]
 
 
 def full():
