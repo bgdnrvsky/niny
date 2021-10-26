@@ -1,6 +1,3 @@
-
-
-
 # Niny
 **Stack-oriented programming language, with Python under the hood**
 
@@ -393,8 +390,18 @@ Extension *".nn"*
 	  $ 2
 	  $ 1
 
-- Commands **"int", "float", "bool", "str"** for **typecasting**, **requires at
+- Commands **"int", "float", "bool", "str", "list"** for **typecasting**, **requires at
   least 1 element in stack**.
+
+- Command **"id"** for **getting an item by index of last item in stack with
+  type "list"**, **requires at least 1 item in stack**, **requires 1 argument**, **requires last item to have "list" type**.
+
+  *Example:*
+    
+    push 1 $ stack = [1]
+    push [1,2,3] $ stack = [1, [1, 2, 3]]
+
+    id 2 $ stack = [1, [1, 2, 3], 3]
 
 - Command **"swp"** for **changing places of last 2 elements**, **requires at least 2 elements in stack**.
 
