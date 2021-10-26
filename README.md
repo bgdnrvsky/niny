@@ -338,8 +338,6 @@ Extension *".nn"*
 
 - Command **"dump"** for **printing** last element in stack, **takes 1 optional argument, as a string**, **requires at least 1 elements in stack**. 
 
-  **Known bug: you cant provide a string, with a space inside**
-
   *Example 1:*
 
       push 5
