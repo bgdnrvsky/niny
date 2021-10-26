@@ -348,7 +348,23 @@ def ignoreComments(line):
 
 def popS():
     checkStack(1)
-    stack.pop()
+    global index
+
+    line = f[index]
+    line = ignoreComments(line)
+    line = line.split()
+    if len(line) == 1:
+        in_ = -1
+    elif len(line) == 2:
+        line.pop(0)
+        in_ = line[0]
+        in_ = eval(in_)
+        if type(in_) != int:
+            errorWithLine("Can take index with type \"int\"")
+    else:
+        errorWithLine("Wrong command structure")
+
+    stack.pop(in_)
 
 
 def push(line):
