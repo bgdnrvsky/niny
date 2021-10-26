@@ -304,14 +304,19 @@ Extension *".nn"*
       push 5 $ stack = [6, 5]
       > $ stack = [0]
 
-- Command **"pop"** for **removing** last element in stack, **requires at least 1 elements in stack**. 
+- Command **"pop"** for **removing element in stack by it's index**, **takes 1 optional argument**, **requires at least 1 elements in stack**. 
+
+  *Note: By default index is -1*
 
   *Example:*
 
-      push 5 $ stack = [5]
-      push 3 $ stack = [5, 3]
-      pop $ stack = [5]
-
+      push 1 $ stack = [1]
+      push 2 $ stack = [1, 2]
+      push 3 $ stack = [1, 2, 3]
+      
+      pop 1 $ stack = [1, 3]
+      pop $ stack = [1]
+      
 - Command **"dup"** for **duplicating** last element in stack, **requires at least 1 elements in stack**. 
 
   *Example:*
@@ -413,9 +418,9 @@ Extension *".nn"*
       push 2 $ stack = [1, 2]
       swp $ stack = [2, 1]
 
-- Command **"get"** for **getting item in a stack by it's index**, **takes 1 optional argument, as int**
+- Command **"get"** for **getting item in a stack by it's index**, **takes 1 optional argument, as int**.
 
-  *Note: default index is **-1***
+  *Note: default index is -1*
 
   *Example:*
 
@@ -425,6 +430,14 @@ Extension *".nn"*
       get $ stack = [1, 2, 3, 3]
       get 1 $ stack = [1, 2, 3, 3, 2]
       get 2 $ stack = [1, 2, 3, 3, 2, 3]
+
+- Command **"flat"** for **flattening a list** in stack, **requires at least
+  1 element in stack**, **requires last element to have a "list" type**.
+
+  *Example:*
+
+      push [1, [2, 3, 4], 5]
+      flat $ stack = [1, 2, 3, 4, 5]
 
 - Command **"if"** for **conditions**, has 2 structures: **"if do macro_name_true"** or **"if do macro_name_true else do macro_name_false"**.
 
