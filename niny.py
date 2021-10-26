@@ -35,6 +35,7 @@ commands = {
     "string": "typecastString()",
     "list": "typecastList()",
     "id": "getIndex()",
+    "flat": "flatten()",
 }
 
 
@@ -109,6 +110,31 @@ def cat(path):
         result += line
 
     return result
+
+
+def is_array(array):
+    return type(array) == list
+
+
+def flat_list(array):
+    result = []
+
+    for item in array:
+        if is_array(item):
+            result.extend(flat_list(item))
+        else:
+            result.append(item)
+    
+    return result
+
+
+def flatten():
+    global stack
+    if type(stack[-1]) != list:
+        errorWithLine("Can only flat objects with \"list\" type")
+
+    a = stack.pop()
+    stack.extend(flat_list(a))
 
 
 def reverse():
