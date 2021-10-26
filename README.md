@@ -1,5 +1,6 @@
 
 
+
 # Niny
 **Stack-oriented programming language, with Python under the hood**
 
@@ -371,26 +372,26 @@ Extension *".nn"*
 
 - Command **"rev"** for **reversing a stack**.
 
-*Example:*
+	*Example:*
 
-      push 1
-      push 2
-      push 3
-      full
+	  push 1
+	  push 2
+	  push 3
+	  full
 
-      push "\n"
-      dump
-
-      rev
-      full
-      $ OUT:
-      $ 1
-      $ 2
-      $ 3
-      $
-      $ 3
-      $ 2
-      $ 1
+	  push "\n"
+	  dump
+	  
+	  rev
+	  full
+	  $ OUT:
+	  $ 1
+	  $ 2
+	  $ 3
+	  $
+	  $ 3
+	  $ 2
+	  $ 1
 
 - Commands **"int", "float", "bool", "str"** for **typecasting**, **requires at
   least 1 element in stack**.
@@ -405,7 +406,7 @@ Extension *".nn"*
 
 - Command **"get"** for **getting item in a stack by it's index**, **takes 1 optional argument, as int**
 
-*Note: default index is **-1***
+  *Note: default index is **-1***
 
   *Example:*
 
