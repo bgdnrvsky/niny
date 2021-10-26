@@ -80,12 +80,12 @@ def getIndex():
     if type(in_) != int:
         errorWithLine("Can only get index with type \"int\"")
 
-    a = stack[-1] 
+    a = stack[-1]
     if type(a) != list:
         errorWithLine("Can only get index of objects with type \"list\"")
 
     stack.append(a[in_])
-    
+
 
 def library(index):
     assert False, "Not implemented"
@@ -125,7 +125,7 @@ def flat_list(array):
             result.extend(flat_list(item))
         else:
             result.append(item)
-    
+
     return result
 
 
@@ -246,6 +246,7 @@ def condition(start_index):
     else:
         errorWithLine("Wrong condition structure")
 
+
 def divmode():
     checkStack(2)
     a = stack.pop()
@@ -302,7 +303,8 @@ def getVal(line, index=-1):
         errorWithLine("Syntax Error")
 
     if type(index) != int:
-        errorWithLine("Int type should be provided for getting the element in STACK")
+        errorWithLine(
+            "Int type should be provided for getting the element in STACK")
 
     stack.append(stack[index])
 
@@ -374,7 +376,7 @@ def push(line):
     line = line.strip()
     if line == '':
         errorWithLine("Invalid command structure")
-    
+
     stack.append(eval(line))
 
 
@@ -446,7 +448,6 @@ def runMacro(com_name):
         start_index += 1
 
 
-
 def execLine(line, index):
     line = line.strip()
     line = line.split()
@@ -496,4 +497,3 @@ if __name__ == "__main__":
     main(args[1])
 
     exit()
-
