@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import sys
+sys.setrecursionlimit(10**8)
 
 commands = {
     "push": "push(line)",
