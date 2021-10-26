@@ -33,6 +33,7 @@ commands = {
     "bool": "typecastBool()",
     "float": "typecastFloat()",
     "string": "typecastString()",
+    "list": "typecastList()",
     "id": "getIndex()",
 }
 
@@ -55,6 +56,11 @@ def typecastFloat():
 def typecastString():
     global stack
     stack[-1] = str(stack[-1])
+
+
+def typecastList():
+    global stack
+    stack[-1] = list(stack[-1])
 
 
 def getIndex():
