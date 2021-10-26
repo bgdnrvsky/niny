@@ -1,3 +1,4 @@
+
 # Niny
 **Stack-oriented programming language, with Python under the hood**
 
@@ -398,10 +399,10 @@ Extension *".nn"*
 
   *Example:*
     
-    push 1 $ stack = [1]
-    push [1,2,3] $ stack = [1, [1, 2, 3]]
+      push 1 $ stack = [1]
+      push [1,2,3] $ stack = [1, [1, 2, 3]]
 
-    id 2 $ stack = [1, [1, 2, 3], 3]
+      id 2 $ stack = [1, [1, 2, 3], 3]
 
 - Command **"swp"** for **changing places of last 2 elements**, **requires at least 2 elements in stack**.
 
