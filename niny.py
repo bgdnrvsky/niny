@@ -420,10 +420,14 @@ def swp():
 
 def dump(line, ending=''):
     checkStack(1)
-    try:
-        print(stack[-1], end=eval(line[1]))
-    except IndexError:
-        print(stack[-1], end=ending)
+    line.pop(0)
+    line = ' '.join(line)
+
+    line = line.strip()
+    if len(line) != 0:
+        line = eval(line)
+
+    print(stack[-1], end=line)
 
 
 def runMacro(com_name):
