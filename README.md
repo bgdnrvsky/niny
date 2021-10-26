@@ -141,8 +141,8 @@ Extension *".nn"*
           pop
       end
 
-        foo $ OUT:  "foo"
-        del foo
+      foo $ OUT:  "foo"
+      del foo
       foo 
       $ OUT: 
       $ Unknown command
@@ -203,7 +203,7 @@ Extension *".nn"*
 
   *Example:*
 
-        push 3 $ stack = [3]
+      push 3 $ stack = [3]
       push 2 $ stack = [3, 2]
       push 4 $ stack = [3, 2, 4]
       root $ stack = [3, 2.0]
@@ -459,12 +459,12 @@ Extension *".nn"*
     All command inside the macro will be computed once you call the macro
 
 
-        macro_name
+      macro_name
 
     *Example:*
 
 
-        macro hello_world do
+      macro hello_world do
           push "Hello World!"
           dump "\n"
           pop
