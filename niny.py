@@ -33,6 +33,7 @@ commands = {
     "bool": "typecastBool()",
     "float": "typecastFloat()",
     "string": "typecastString()",
+    "id": "getIndex()",
 }
 
 
@@ -56,29 +57,35 @@ def typecastString():
     stack[-1] = str(stack[-1])
 
 
-def library(index):
-    # Making input file readable
-    """
-    line = f[index]
-    line = line.strip()
-    line = line.split()
-    line.pop(0)
-    line = ' '.join(line)
-    line = line.strip()
-    line = list(line)
-    line.pop(0)
-    line.pop()
-    line = ''.join(line)
-    line += ".nn"
+def getIndex():
+    global stack, index
 
-    content = cat(line)
-    f[index] = content
-    """
+    checkStack(1)
+    line = f[index]
+    line = line.split(' ')
+    if len(line) != 2:
+        errorWithLine("Wrong command structure")
+    line.pop(0)
+
+    in_ = eval(line[0])
+    del line
+    if type(in_) != int:
+        errorWithLine("Can only get index with type \"int\"")
+
+    a = stack[-1] 
+    if type(a) != list:
+        errorWithLine("Can only get index of objects with type \"list\"")
+
+    stack.append(a[in_])
+    
+
+def library(index):
     assert False, "Not implemented"
 
 
-def errorWithLine():
+def errorWithLine(msg):
     line = f[index]
+    print(msg)
     print(f"Line {index + 1}\n-> ", end='')
     print(line, end='')
     exit()
@@ -86,8 +93,7 @@ def errorWithLine():
 
 def checkStack(length):
     if len(stack) < length:
-        print("Not enough elements in stack")
-        errorWithLine()
+        errorWithLine("Not enough elements in stack")
 
 
 def cat(path):
@@ -168,9 +174,12 @@ def getType():
         stack.append("str")
     elif type_ == float:
         stack.append("float")
+    elif type_ == list:
+        stack.append("list")
 
 
 def condition(start_index):
+    checkStack(1)
     global index
 
     line = f[start_index]
@@ -181,8 +190,7 @@ def condition(start_index):
         cond_false = header[5]
 
         if cond_true not in macros or cond_false not in macros:
-            print("Invalid macros in condition")
-            errorWithLine()
+            errorWithLine("Invalid macros in condition")
             exit()
 
         cond = stack.pop()
@@ -195,8 +203,7 @@ def condition(start_index):
         cond_true = header[2]
 
         if cond_true not in macros:
-            print("Invalid macros in condition")
-            errorWithLine()
+            errorWithLine("Invalid macros in condition")
             exit()
 
         cond = stack.pop()
@@ -204,9 +211,7 @@ def condition(start_index):
             execLine(cond_true, start_index)
 
     else:
-        errorWithLine()
-        assert False, "Wrong condition structure"
-
+        errorWithLine("Wrong condition structure")
 
 def divmode():
     checkStack(2)
@@ -254,19 +259,17 @@ def inp():
 
 def getVal(line, index=-1):
     checkStack(1)
+
     length = len(line)
     if length == 1:
         pass
     elif length == 2:
         index = eval(line[1])
     else:
-        print("Syntax Error")
-        errorWithLine()
-        exit()
+        errorWithLine("Syntax Error")
 
     if type(index) != int:
-        print("Int type should be provided for getting the element in STACK")
-        errorWithLine()
+        errorWithLine("Int type should be provided for getting the element in STACK")
 
     stack.append(stack[index])
 
@@ -278,14 +281,13 @@ def macro():
     header = ignoreComments(header)
     header = header.split()
     if len(header) != 3:
-        print("Wrong macro header")
-        errorWithLine()
+        errorWithLine("Wrong macro header")
     name = header[1]
 
     keywords = header[0], header[2]
     if keywords != ("macro", "do"):
         print("Wrong macro header")
-        errorWithLine()
+        errorWithLine("Wrong macro header")
 
     del keywords
 
@@ -321,6 +323,9 @@ def push(line):
     line.pop(0)
     line = ' '.join(line)
     line = line.strip()
+    if line == '':
+        errorWithLine("Invalid command structure")
+    
     stack.append(eval(line))
 
 
@@ -400,8 +405,7 @@ def execLine(line, index):
         if com_name in macros:
             runMacro(com_name)
         else:
-            print("Unknown command")
-            errorWithLine()
+            errorWithLine("Unknown command")
             exit()
 
 
