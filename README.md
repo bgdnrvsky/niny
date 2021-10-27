@@ -40,6 +40,37 @@ Extension *".nn"*
 	    if do loop
 	end
 
+*Range function*
+    
+    macro loop do
+        rev
+        get 0
+        append
+        rev
+        push 1
+        add
+        permutations
+    end
+
+    macro permutations do
+        get 1
+        get 2
+
+        ==
+        not
+        if do loop
+    end
+
+    macro range do
+        rev
+        push []
+        rev
+        swp
+        permutations
+        pop
+        append
+    end
+
 *Program that takes last number from stack, and if it is greater than zero, increases it by one, otherwise, decreases it by one*
 
     macro y do
