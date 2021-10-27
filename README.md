@@ -208,7 +208,7 @@ Extension *".nn"*
 
 - Command **"mult"** for **arithmetic multiplication** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "mult" removes the elements beign operated on.*
+  *Note: "mult" removes the elements being operated on.*
 
   *Example:*
 
@@ -219,7 +219,7 @@ Extension *".nn"*
 
 - Command **"pow"** for **arithmetic exponentiation** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "pow" removes the elements beign operated on.*
+  *Note: "pow" removes the elements being operated on.*
 
   *Example:*
 
@@ -231,7 +231,7 @@ Extension *".nn"*
 
 - Command **"root"** for **taking root** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "root" removes the elements beign operated on.*
+  *Note: "root" removes the elements being operated on.*
 
   *Example:*
 
@@ -242,7 +242,7 @@ Extension *".nn"*
 
 - Command **"div"** for **arithmetic division** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "div" removes the elements beign operated on.*
+  *Note: "div" removes the elements being operated on.*
 
   *Example:*
 
@@ -253,7 +253,7 @@ Extension *".nn"*
 
 - Command **"type"** for **getting type** of last element in stack, **appends the result to end of the stack**, **requires at least 1 element in stack**.
 
-  *Note: "type" removes the elements beign operated on.*
+  *Note: "type" removes the elements being operated on.*
 
   *Note: the output has string type*
 
@@ -264,7 +264,7 @@ Extension *".nn"*
 
 - Command **"or"** for **logic or** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "or" removes the elements beign operated on.*
+  *Note: "or" removes the elements being operated on.*
 
   *Note: the output is 1 (true) or 0 (false)
 
@@ -277,7 +277,7 @@ Extension *".nn"*
 
 - Command **"not"** for **logic not** of last element in stack, **appends the result to end of the stack**, **requires at least 1 elements in stack**. 
 
-  *Note: "not" removes the elements beign operated on.*
+  *Note: "not" removes the elements being operated on.*
 
   *Note: the output is 1 (true) or 0 (false)
 
@@ -289,7 +289,7 @@ Extension *".nn"*
 
 - Command **"and"** for **logic and** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "and" removes the elements beign operated on.*
+  *Note: "and" removes the elements being operated on.*
 
   *Note: the output is 1 (true) or 0 (false)
 
@@ -301,7 +301,7 @@ Extension *".nn"*
 
 - Command **"=="** for **logic comparison** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "==" removes the elements beign operated on.*
+  *Note: "==" removes the elements being operated on.*
 
   *Note: the output is 1 (true) or 0 (false)
 
@@ -313,7 +313,7 @@ Extension *".nn"*
 
 - Command **"<"** for **logic less than** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "<" removes the elements beign operated on.*
+  *Note: "<" removes the elements being operated on.*
 
   *Note: the output is 1 (true) or 0 (false)
 
@@ -325,7 +325,7 @@ Extension *".nn"*
 
 - Command **">"** for **logic greater than** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: ">" removes the elements beign operated on.*
+  *Note: ">" removes the elements being operated on.*
 
   *Note: the output is 1 (true) or 0 (false)
 
@@ -358,7 +358,7 @@ Extension *".nn"*
 
 - Command **"divmod"** **returns the quotient-remainder of the argument division** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
-  *Note: "dimod" removes the elements beign operated on.*
+  *Note: "dimod" removes the elements being operated on.*
 
   *Example:*
 
@@ -449,6 +449,19 @@ Extension *".nn"*
       push 4 $ stack = [[1,2,3], 4]
       append $ stack = [[1,2,3,4]]
 
+- Command **"insert"** for **changing index of last element in stack**,
+  **requires 1 argument**.
+
+  *Note: "insert" command removes the item being operated on."
+
+  *Example:*
+
+      push 1 $ stack = [1]
+      push 3 $ stack = [1, 3]
+      push 4 $ stack = [1, 3, 4]
+      push 2 $ stack = [1, 3, 4, 2]
+      insert 1 $ stack = [1, 2, 3, 4]
+
 - Command **"swp"** for **changing places of last 2 elements**, **requires at least 2 elements in stack**.
 
   *Example:*
@@ -482,7 +495,7 @@ Extension *".nn"*
 
   *Note: macro_name_true or macro_name_false can be defined before or after the condition, as long as they are defined when the program passes to the condition*
 
-  *Note: condition removes the elements beign checked on.*
+  *Note: condition removes the elements being checked on.*
 
   *Example:*
 
