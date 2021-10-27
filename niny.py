@@ -4,7 +4,6 @@ sys.setrecursionlimit(10**8)
 
 commands = {
     "push": "push(line)",
-    "include": "library(index)",
     "del": "deleteM(line)",
     "add": "add()",
     "sub": "sub()",
@@ -38,6 +37,7 @@ commands = {
     "id": "getIndex()",
     "flat": "flatten()",
     "append": "appendTo()",
+    "insert": "insertTo()",
 }
 
 
@@ -75,6 +75,20 @@ def appendTo():
     stack[-1].append(item)
 
 
+def insertTo():
+    checkStack(1)
+    line = f[index]
+    line = ignoreComments(line)
+    line = line.strip()
+
+    in_ = eval(line.split()[1])
+    if type(in_) != int:
+        errorWithLine("Can only insert to index with type \"int\"")
+
+    item = stack.pop()
+    stack.insert(in_, item)
+
+
 def getIndex():
     global stack, index
 
@@ -95,10 +109,6 @@ def getIndex():
         errorWithLine("Can only get index of objects with type \"list\"")
 
     stack.append(a[in_])
-
-
-def library(index):
-    assert False, "Not implemented"
 
 
 def errorWithLine(msg):
