@@ -411,7 +411,6 @@ Extension *".nn"*
 	  push 2
 	  push 3
 	  full
-	  
 	  rev
 	  full
 	  $ OUT:
