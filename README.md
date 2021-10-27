@@ -155,7 +155,7 @@ Extension *".nn"*
 # Docs
 
  - Use **"$"** sign for **commenting**.
- - Command **"push"** for **adding an element to the end of stack**, **requires 1 argument**.
+ - Command **"push"** for **adding an element to the end of stack**, **takes 1 argument**.
 
    *Example:*
 
@@ -163,7 +163,7 @@ Extension *".nn"*
        push 5 $ stack = [5]
        push 4 $ stack = [5, 4]
 
-- Command **"del"** for **deleting a macro**, **requires 1 argument**.
+- Command **"del"** for **deleting a macro**, **takes 1 argument**.
 
   *Example:*
 
@@ -339,6 +339,8 @@ Extension *".nn"*
 
   *Note: By default index is -1*
 
+  *Add-on: can take '+' as an argument.*
+
   *Example:*
 
       push 1 $ stack = [1]
@@ -409,26 +411,20 @@ Extension *".nn"*
 	  push 2
 	  push 3
 	  full
-
-	  push "\n"
-	  dump
 	  
 	  rev
 	  full
 	  $ OUT:
-	  $ 1
-	  $ 2
-	  $ 3
-	  $
-	  $ 3
-	  $ 2
-	  $ 1
+	  $ 1, 2, 3
+      $ 3, 2, 1
 
 - Commands **"int", "float", "bool", "str", "list"** for **typecasting**, **requires at
   least 1 element in stack**.
 
 - Command **"id"** for **getting an item by index of last item in stack with
-  type "list"**, **requires at least 1 item in stack**, **requires 1 argument**, **requires last item to have "list" type**.
+  type "list"**, **requires at least 1 item in stack**, **takes 1 argument**, **requires last item to have "list" type**.
+
+  *Add-on: can take '+' as an argument.*
 
   *Example:*
     
@@ -437,8 +433,7 @@ Extension *".nn"*
 
       id 2 $ stack = [1, [1, 2, 3], 3]
 
-- Command **"append"** for **appending item stack[-1] to list stack[-2]**,
-  **requires at least 2 items in stack**, **requires item stack[-2] to have
+- Command **"append"** for **appending item stack[-1] to list stack[-2]**, **requires at least 2 items in stack**, **requires item stack[-2] to have
   type "list"**.
 
   *Note: "append" command removes the item stack[-1]*
@@ -449,8 +444,9 @@ Extension *".nn"*
       push 4 $ stack = [[1,2,3], 4]
       append $ stack = [[1,2,3,4]]
 
-- Command **"insert"** for **changing index of last element in stack**,
-  **requires 1 argument**.
+- Command **"insert"** for **changing index of last element in stack**, **takes 1 argument**.
+
+  *Add-on: can take '+' as an argument.*
 
   *Note: "insert" command removes the item being operated on."
 
@@ -471,6 +467,8 @@ Extension *".nn"*
       swp $ stack = [2, 1]
 
 - Command **"get"** for **getting item in a stack by it's index**, **takes 1 optional argument, as int**.
+
+  *Add-on: can take '+' as an argument.*
 
   *Note: default index is -1*
 
