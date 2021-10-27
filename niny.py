@@ -37,6 +37,7 @@ commands = {
     "list": "typecastList()",
     "id": "getIndex()",
     "flat": "flatten()",
+    "append": "appendTo()",
 }
 
 
@@ -63,6 +64,15 @@ def typecastString():
 def typecastList():
     global stack
     stack[-1] = list(stack[-1])
+
+
+def appendTo():
+    checkStack(2)
+    item = stack.pop()
+    if type(stack[-1]) != list:
+        errorWithLine("Can only append to object with type \"list\"")
+
+    stack[-1].append(item)
 
 
 def getIndex():
@@ -147,9 +157,14 @@ def full():
     if len(stack) == 0:
         print([])
         return
+    
+    length = len(stack)
+    for index in range(length):
+        print(stack[index], end='')
+        if index != length - 1:
+            print(", ", end='')
 
-    for item in stack:
-        print(item)
+    print()
 
 
 def logicAnd():
@@ -216,6 +231,7 @@ def condition(start_index):
     global index
 
     line = f[start_index]
+    line = ignoreComments(line)
     header = line.split()
     length = len(header)
     if length == 6:
