@@ -94,6 +94,7 @@ def getIndex():
 
     checkStack(1)
     line = f[index]
+    line = ignoreComments(line)
     line = line.split(' ')
     if len(line) != 2:
         errorWithLine("Wrong command structure")
@@ -167,7 +168,7 @@ def full():
     if len(stack) == 0:
         print([])
         return
-    
+
     length = len(stack)
     for index in range(length):
         print(stack[index], end='')
