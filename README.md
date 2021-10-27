@@ -368,9 +368,7 @@ Extension *".nn"*
       push 3
       full
       $ OUT:
-      $ 1
-      $ 2
-      $ 3
+      $ 1, 2, 3
 
 - Command **"rev"** for **reversing a stack**.
 
@@ -407,6 +405,18 @@ Extension *".nn"*
       push [1,2,3] $ stack = [1, [1, 2, 3]]
 
       id 2 $ stack = [1, [1, 2, 3], 3]
+
+- Command **"append"** for **appending item stack[-1] to list stack[-2]**,
+  **requires at least 2 items in stack**, **requires item stack[-2] to have
+  type "list"**.
+
+  *Note: "append" command removes the item stack[-1]*
+
+  *Example:*
+
+      push [1, 2, 3] $ stack = [[1,2,3]]
+      push 4 $ stack = [[1,2,3], 4]
+      append $ stack = [[1,2,3,4]]
 
 - Command **"swp"** for **changing places of last 2 elements**, **requires at least 2 elements in stack**.
 
