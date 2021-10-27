@@ -80,8 +80,14 @@ def insertTo():
     line = f[index]
     line = ignoreComments(line)
     line = line.strip()
+    line = line.split(' ')
+    line.pop(0)
 
-    in_ = eval(line.split()[1])
+    if line[0] == '+':
+        checkStack(2)
+        in_ = stack.pop()
+    else:
+        in_ = eval(line[0])
     if type(in_) != int:
         errorWithLine("Can only insert to index with type \"int\"")
 
@@ -95,13 +101,19 @@ def getIndex():
     checkStack(1)
     line = f[index]
     line = ignoreComments(line)
+    line = line.strip()
     line = line.split(' ')
     if len(line) != 2:
         errorWithLine("Wrong command structure")
     line.pop(0)
 
-    in_ = eval(line[0])
+    if line[0] == '+':
+        checkStack(2)
+        in_ = stack.pop()
+    else:
+        in_ = eval(line[0])
     del line
+
     if type(in_) != int:
         errorWithLine("Can only get index with type \"int\"")
 
@@ -325,7 +337,11 @@ def getVal(line, index=-1):
     if length == 1:
         pass
     elif length == 2:
-        index = eval(line[1])
+        if line[1] == '+':
+            checkStack(2)
+            index = stack.pop()
+        else:
+            index = eval(line[1])
     else:
         errorWithLine("Syntax Error")
 
@@ -382,13 +398,19 @@ def popS():
 
     line = f[index]
     line = ignoreComments(line)
+    line = line.strip()
     line = line.split()
+
     if len(line) == 1:
         in_ = -1
     elif len(line) == 2:
         line.pop(0)
         in_ = line[0]
-        in_ = eval(in_)
+        if in_ == '+':
+            checkStack(2)
+            in_ = stack.pop()
+        else:    
+            in_ = eval(in_)
         if type(in_) != int:
             errorWithLine("Can take index with type \"int\"")
     else:
@@ -452,8 +474,8 @@ def dump(line, ending=''):
     checkStack(1)
     line.pop(0)
     line = ' '.join(line)
-
     line = line.strip()
+
     if len(line) != 0:
         line = eval(line)
 
