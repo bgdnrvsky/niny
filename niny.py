@@ -541,8 +541,7 @@ def main(path):
 
 if __name__ == "__main__":
     global args
-    # args = sys.argv
-    # main(args[1])
-    main("test.nn")
+    args = sys.argv
+    main(args[1])
 
     exit()
