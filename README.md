@@ -9,6 +9,8 @@ Niny - stack-oriented programming language, powered with Python, but in future, 
 
 Extension *".nn"*
 
+[Syntax highlighting](https://github.com/krontzo/niny.vim)
+
 # Examples
 *Hello world*
 
