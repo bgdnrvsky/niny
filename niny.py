@@ -283,7 +283,7 @@ def condition(index):
 
         cond = stack.pop()
         if cond == 1:
-            runMacro(cond)
+            runMacro(cond_true)
 
     else:
         errorWithLine("Wrong condition structure")
