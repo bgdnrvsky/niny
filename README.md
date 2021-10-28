@@ -77,17 +77,22 @@ Extension *".nn"*
 *Program that takes last number from stack, and if it is greater than zero, increases it by one, otherwise, decreases it by one*
 
     macro y do
-	    push 1
-	    add
-	end
+        push 1
+        add
+    end
 
-	macro n do
-	    push 1
-	    swp
-	    sub
-	end
+    macro n do
+        push 1
+        swp
+        sub
+    end
 
-	if do y else do n
+    push 5 $ Or any number
+    dup
+    push 0
+    <
+
+    if do y else do n
 
 *Program that takes last number from stack, and prints sum of all numbers from that number to 1*
 
