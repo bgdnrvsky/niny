@@ -24,7 +24,7 @@ commands = {
     "dump": "dump(line)",
     "inp": "inp()",
     "full": "full()",
-    "if": "condition()",
+    "if": "condition(index)",
     "get": "getVal(line)",
     "swp": "swp()",
     "macro": "macro()",
@@ -255,9 +255,8 @@ def getType():
         stack.append("list")
 
 
-def condition():
+def condition(index):
     checkStack(1)
-    global index
 
     line = f[index]
     line = ignoreComments(line)
@@ -284,7 +283,7 @@ def condition():
 
         cond = stack.pop()
         if cond == 1:
-            execLine(cond_true, start_index)
+            runMacro(cond)
 
     else:
         errorWithLine("Wrong condition structure")
