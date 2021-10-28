@@ -489,6 +489,8 @@ Extension *".nn"*
       push [1, [2, 3, 4], 5]
       flat $ stack = [1, 2, 3, 4, 5]
 
+- Command **"len"** for **getting length of a stack**.
+
 - Command **"if"** for **conditions**, has 2 structures: **"if do macro_name_true"** or **"if do macro_name_true else do macro_name_false"**.
 
   *Note: macro_name_true or macro_name_false can be defined before or after the condition, as long as they are defined when the program passes to the condition*
