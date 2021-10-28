@@ -1,4 +1,5 @@
 
+
 # Niny
 **Stack-oriented programming language, with Python under the hood**
 
@@ -540,3 +541,15 @@ Extension *".nn"*
   *Note: indentaion inside the macro isn't required*
 
   **Known bugs: you can't define a macro inside a macro**
+
+- Argument **"+"** **can be used instead of an argument in almost all functions that take an argument. It implies that the last element of the stack will be used instead of the parameter you give**.
+
+  *Example:*
+
+      push 1 $ stack = [1]
+      push 2 $ stack = [1, 2]
+      push 3 $ stack = [1, 2, 3]
+	
+	  push 1 $ stack = [1, 2, 3, 1]
+	  pop + $ stack = [1, 3]
+	  pop $ stack = [1]
