@@ -19,13 +19,18 @@ Extension *".nn"*
 
 *Factorial*
 
-    macro loop do
+    macro recursion do
 	    dup
 	    push -1
 	    add
 	    fact
 	    mult
 	end
+
+    macro default do
+        pop
+        push 1
+    end
 
 	macro fact do
 	    dup
@@ -40,7 +45,7 @@ Extension *".nn"*
 
 	    or
 	    not
-	    if do loop
+	    if do recursion else do default
 	end
 
 *Range function*
