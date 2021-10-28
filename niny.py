@@ -38,6 +38,7 @@ commands = {
     "flat": "flatten()",
     "append": "appendTo()",
     "insert": "insertTo()",
+    "len": "getLength()",
 }
 
 
@@ -122,6 +123,11 @@ def getIndex():
         errorWithLine("Can only get index of objects with type \"list\"")
 
     stack.append(a[in_])
+
+
+def getLength():
+    global stack
+    stack.append(len(stack))
 
 
 def errorWithLine(msg):
@@ -409,7 +415,7 @@ def popS():
         if in_ == '+':
             checkStack(2)
             in_ = stack.pop()
-        else:    
+        else:
             in_ = eval(in_)
         if type(in_) != int:
             errorWithLine("Can take index with type \"int\"")
