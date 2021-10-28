@@ -18,13 +18,13 @@ commands = {
     '==': "logicEquals()",
     '<': "logicLessThan()",
     '>': "logicGreaterThan()",
-    "pop": "popS()",
+    "pop": "popS(index)",
     "dup": "dup()",
     "divmod": "divmode()",
     "dump": "dump(line)",
     "inp": "inp()",
     "full": "full()",
-    "if": "condition(index)",
+    "if": "condition()",
     "get": "getVal(line)",
     "swp": "swp()",
     "macro": "macro()",
@@ -255,11 +255,11 @@ def getType():
         stack.append("list")
 
 
-def condition(start_index):
+def condition():
     checkStack(1)
     global index
 
-    line = f[start_index]
+    line = f[index]
     line = ignoreComments(line)
     header = line.split()
     length = len(header)
@@ -269,20 +269,18 @@ def condition(start_index):
 
         if cond_true not in macros or cond_false not in macros:
             errorWithLine("Invalid macros in condition")
-            exit()
 
         cond = stack.pop()
         if cond == 1:
-            execLine(cond_true, start_index)
+            runMacro(cond_true)
         else:
-            execLine(cond_false, start_index)
+            runMacro(cond_false)
 
     elif length == 3:
         cond_true = header[2]
 
         if cond_true not in macros:
             errorWithLine("Invalid macros in condition")
-            exit()
 
         cond = stack.pop()
         if cond == 1:
@@ -375,20 +373,16 @@ def macro():
 
     del keywords
 
-    stop_index = index + 1
+    start_index = index
+    index += 1
     while True:
-        body = f[stop_index].strip()
-        break_index = -1
-
-        if body == "break":
-            break_index = stop_index
+        body = f[index].strip()
 
         if body == "end":
-            macros[name] = (index + 1, stop_index - 1)
-            index = stop_index
+            macros[name] = (start_index + 1, index - 1)
             break
 
-        stop_index += 1
+        index += 1
 
 
 def ignoreComments(line):
@@ -398,9 +392,8 @@ def ignoreComments(line):
     return line[:line.index('$')]
 
 
-def popS():
+def popS(index):
     checkStack(1)
-    global index
 
     line = f[index]
     line = ignoreComments(line)
@@ -548,7 +541,8 @@ def main(path):
 
 if __name__ == "__main__":
     global args
-    args = sys.argv
-    main(args[1])
+    # args = sys.argv
+    # main(args[1])
+    main("test.nn")
 
     exit()
