@@ -69,6 +69,7 @@ def typecastList():
 
 def appendTo():
     checkStack(2)
+
     item = stack.pop()
     if type(stack[-1]) != list:
         errorWithLine("Can only append to object with type \"list\"")
@@ -78,14 +79,17 @@ def appendTo():
 
 def insertTo():
     checkStack(1)
+
     line = f[index]
     line = ignoreComments(line)
     line = line.strip()
     line = line.split(' ')
+
     line.pop(0)
 
     if line[0] == '+':
         checkStack(2)
+
         in_ = stack.pop()
     else:
         in_ = eval(line[0])
@@ -100,19 +104,24 @@ def getIndex():
     global stack, index
 
     checkStack(1)
+
     line = f[index]
     line = ignoreComments(line)
     line = line.strip()
     line = line.split(' ')
+
     if len(line) != 2:
         errorWithLine("Wrong command structure")
+
     line.pop(0)
 
     if line[0] == '+':
         checkStack(2)
+
         in_ = stack.pop()
     else:
         in_ = eval(line[0])
+
     del line
 
     if type(in_) != int:
@@ -132,24 +141,17 @@ def getLength():
 
 def errorWithLine(msg):
     line = f[index]
+
     print(msg)
     print(f"Line {index + 1}\n-> ", end='')
     print(line, end='')
+
     exit()
 
 
 def checkStack(length):
     if len(stack) < length:
         errorWithLine("Not enough elements in stack")
-
-
-def cat(path):
-    result = ""
-    f = open(path)
-    for line in f:
-        result += line
-
-    return result
 
 
 def is_array(array):
@@ -170,6 +172,7 @@ def flat_list(array):
 
 def flatten():
     global stack
+
     if type(stack[-1]) != list:
         errorWithLine("Can only flat objects with \"list\" type")
 
@@ -198,34 +201,43 @@ def full():
 
 def logicAnd():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(1 if a == 1 and b == 1 else 0)
 
 
 def logicEquals():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(1 if a == b else 0)
 
 
 def logicLessThan():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(1 if a < b else 0)
 
 
 def logicGreaterThan():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(1 if a > b else 0)
 
 
 def logicNot():
     checkStack(1)
+
     cond = stack.pop()
     if cond == 1:
         stack.append(0)
@@ -235,13 +247,16 @@ def logicNot():
 
 def logicOr():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(1 if a == 1 or b == 1 else 0)
 
 
 def getType():
     checkStack(1)
+
     a = stack.pop()
     type_ = type(a)
 
@@ -258,10 +273,13 @@ def getType():
 def condition(index):
     checkStack(1)
 
+
     line = f[index]
     line = ignoreComments(line)
+
     header = line.split()
     length = len(header)
+
     if length == 6:
         cond_true = header[2]
         cond_false = header[5]
@@ -270,6 +288,7 @@ def condition(index):
             errorWithLine("Invalid macros in condition")
 
         cond = stack.pop()
+
         if cond == 1:
             runMacro(cond_true)
         else:
@@ -282,6 +301,7 @@ def condition(index):
             errorWithLine("Invalid macros in condition")
 
         cond = stack.pop()
+
         if cond == 1:
             runMacro(cond_true)
 
@@ -291,34 +311,43 @@ def condition(index):
 
 def divmode():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     first, second = divmod(a, b)
+
     stack.append(first)
     stack.append(second)
 
 
 def root():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(a ** (1 / b))
 
 
 def powS():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(a ** b)
 
 
 def dup():
     checkStack(1)
+
     stack.append(stack[-1])
 
 
 def inp():
     inp_ = input()
+
     try:
         stack.append(eval(inp_))
     except NameError:
@@ -330,6 +359,7 @@ def inp():
         except NameError:
             stack.append(eval(inp_))
             return
+
         stack.append(eval(inp_))
 
 
@@ -342,6 +372,7 @@ def getVal(line, index=-1):
     elif length == 2:
         if line[1] == '+':
             checkStack(2)
+
             index = stack.pop()
         else:
             index = eval(line[1])
@@ -349,8 +380,7 @@ def getVal(line, index=-1):
         errorWithLine("Syntax Error")
 
     if type(index) != int:
-        errorWithLine(
-            "Int type should be provided for getting the element in STACK")
+        errorWithLine("Int type should be provided for getting the element in stack")
 
     stack.append(stack[index])
 
@@ -361,11 +391,13 @@ def macro():
     header = f[index]
     header = ignoreComments(header)
     header = header.split()
+
     if len(header) != 3:
         errorWithLine("Wrong macro header")
-    name = header[1]
 
+    name = header[1]
     keywords = header[0], header[2]
+
     if keywords != ("macro", "do"):
         print("Wrong macro header")
         errorWithLine("Wrong macro header")
@@ -374,6 +406,7 @@ def macro():
 
     start_index = index
     index += 1
+
     while True:
         body = f[index].strip()
 
@@ -406,6 +439,7 @@ def popS(index):
         in_ = line[0]
         if in_ == '+':
             checkStack(2)
+
             in_ = stack.pop()
         else:
             in_ = eval(in_)
@@ -419,8 +453,10 @@ def popS(index):
 
 def push(line):
     line.pop(0)
+
     line = ' '.join(line)
     line = line.strip()
+
     if line == '':
         errorWithLine("Invalid command structure")
 
@@ -429,6 +465,7 @@ def push(line):
 
 def deleteM(line):
     line.pop(0)
+
     line = ' '.join(line)
     line = line.strip()
 
@@ -437,39 +474,49 @@ def deleteM(line):
 
 def add():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(a + b)
 
 
 def mult():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(a * b)
 
 
 def div():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(a / b)
 
 
 def sub():
     checkStack(2)
+
     a = stack.pop()
     b = stack.pop()
+
     stack.append(a - b)
 
 
 def swp():
     checkStack(2)
+
     stack[-1], stack[-2] = stack[-2], stack[-1]
 
 
 def dump(line, ending=''):
     checkStack(1)
+
     line.pop(0)
     line = ' '.join(line)
     line = line.strip()
@@ -482,6 +529,7 @@ def dump(line, ending=''):
 
 def runMacro(com_name):
     start_index, stop_index = macros[com_name]
+
     while start_index <= stop_index:
         m_line = f[start_index]
         m_line = ignoreComments(m_line)
@@ -498,6 +546,7 @@ def runMacro(com_name):
 def execLine(line, index):
     line = line.strip()
     line = line.split()
+
     com_name = line[0]
 
     if com_name in commands:
@@ -507,7 +556,6 @@ def execLine(line, index):
             runMacro(com_name)
         else:
             errorWithLine("Unknown command")
-            exit()
 
 
 def main(path):
@@ -534,7 +582,6 @@ def main(path):
             continue
 
         execLine(line, index)
-
         index += 1
 
 
