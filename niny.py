@@ -41,6 +41,10 @@ commands = {
     "len": "getLength()",
 }
 
+flags = {
+    "-d": "debugMode()", "--debug": "debugMode()",
+}
+
 
 def typecastInt():
     global stack
@@ -68,6 +72,8 @@ def typecastList():
 
 
 def appendTo():
+    global debug
+
     checkStack(2)
 
     item = stack.pop()
@@ -76,8 +82,13 @@ def appendTo():
 
     stack[-1].append(item)
 
+    if debug:
+        full()
+
 
 def insertTo():
+    global debug
+
     checkStack(1)
 
     line = f[index]
@@ -99,8 +110,13 @@ def insertTo():
     item = stack.pop()
     stack.insert(in_, item)
 
+    if debug:
+        full()
+
 
 def getIndex():
+    global debug
+
     global stack, index
 
     checkStack(1)
@@ -132,6 +148,9 @@ def getIndex():
         errorWithLine("Can only get index of objects with type \"list\"")
 
     stack.append(a[in_])
+
+    if debug:
+        full()
 
 
 def getLength():
@@ -171,6 +190,8 @@ def flat_list(array):
 
 
 def flatten():
+    global debug
+
     global stack
 
     if type(stack[-1]) != list:
@@ -179,10 +200,18 @@ def flatten():
     a = stack.pop()
     stack.extend(flat_list(a))
 
+    if debug:
+        full()
+
 
 def reverse():
+    global debug
+
     global stack
     stack = stack[::-1]
+
+    if debug:
+        full()
 
 
 def full():
@@ -200,6 +229,8 @@ def full():
 
 
 def logicAnd():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -207,8 +238,13 @@ def logicAnd():
 
     stack.append(1 if a == 1 and b == 1 else 0)
 
+    if debug:
+        full()
+
 
 def logicEquals():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -216,8 +252,13 @@ def logicEquals():
 
     stack.append(1 if a == b else 0)
 
+    if debug:
+        full()
+
 
 def logicLessThan():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -225,8 +266,13 @@ def logicLessThan():
 
     stack.append(1 if a < b else 0)
 
+    if debug:
+        full()
+
 
 def logicGreaterThan():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -234,8 +280,13 @@ def logicGreaterThan():
 
     stack.append(1 if a > b else 0)
 
+    if debug:
+        full()
+
 
 def logicNot():
+    global debug
+
     checkStack(1)
 
     cond = stack.pop()
@@ -244,8 +295,13 @@ def logicNot():
     else:
         stack.append(1)
 
+    if debug:
+        full()
+
 
 def logicOr():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -253,8 +309,13 @@ def logicOr():
 
     stack.append(1 if a == 1 or b == 1 else 0)
 
+    if debug:
+        full()
+
 
 def getType():
+    global debug
+
     checkStack(1)
 
     a = stack.pop()
@@ -269,10 +330,12 @@ def getType():
     elif type_ == list:
         stack.append("list")
 
+    if debug:
+        full()
+
 
 def condition(index):
     checkStack(1)
-
 
     line = f[index]
     line = ignoreComments(line)
@@ -310,6 +373,8 @@ def condition(index):
 
 
 def divmode():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -320,8 +385,13 @@ def divmode():
     stack.append(first)
     stack.append(second)
 
+    if debug:
+        full()
+
 
 def root():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -329,8 +399,13 @@ def root():
 
     stack.append(a ** (1 / b))
 
+    if debug:
+        full()
+
 
 def powS():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -338,11 +413,19 @@ def powS():
 
     stack.append(a ** b)
 
+    if debug:
+        full()
+
 
 def dup():
+    global debug
+
     checkStack(1)
 
     stack.append(stack[-1])
+
+    if debug:
+        full()
 
 
 def inp():
@@ -364,6 +447,8 @@ def inp():
 
 
 def getVal(line, index=-1):
+    global debug
+
     checkStack(1)
 
     length = len(line)
@@ -383,6 +468,9 @@ def getVal(line, index=-1):
         errorWithLine("Int type should be provided for getting the element in stack")
 
     stack.append(stack[index])
+
+    if debug:
+        full()
 
 
 def macro():
@@ -425,6 +513,8 @@ def ignoreComments(line):
 
 
 def popS(index):
+    global debug
+
     checkStack(1)
 
     line = f[index]
@@ -450,8 +540,13 @@ def popS(index):
 
     stack.pop(in_)
 
+    if debug:
+        full()
+
 
 def push(line):
+    global debug
+
     line.pop(0)
 
     line = ' '.join(line)
@@ -461,6 +556,9 @@ def push(line):
         errorWithLine("Invalid command structure")
 
     stack.append(eval(line))
+
+    if debug:
+        full()
 
 
 def deleteM(line):
@@ -473,6 +571,8 @@ def deleteM(line):
 
 
 def add():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -480,8 +580,13 @@ def add():
 
     stack.append(a + b)
 
+    if debug:
+        full()
+
 
 def mult():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -489,8 +594,13 @@ def mult():
 
     stack.append(a * b)
 
+    if debug:
+        full()
+
 
 def div():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -498,8 +608,13 @@ def div():
 
     stack.append(a / b)
 
+    if debug:
+        full()
+
 
 def sub():
+    global debug
+
     checkStack(2)
 
     a = stack.pop()
@@ -507,11 +622,19 @@ def sub():
 
     stack.append(a - b)
 
+    if debug:
+        full()
+
 
 def swp():
+    global debug
+
     checkStack(2)
 
     stack[-1], stack[-2] = stack[-2], stack[-1]
+
+    if debug:
+        full()
 
 
 def dump(line, ending=''):
@@ -528,6 +651,8 @@ def dump(line, ending=''):
 
 
 def runMacro(com_name):
+    global debug
+
     start_index, stop_index = macros[com_name]
 
     while start_index <= stop_index:
@@ -541,6 +666,9 @@ def runMacro(com_name):
 
         execLine(m_line, start_index)
         start_index += 1
+
+    if debug:
+        full()
 
 
 def execLine(line, index):
@@ -572,6 +700,11 @@ def main(path):
     global index
     index = 0
 
+    global debug
+
+    if debug:
+        full()
+
     while index < len(f):
         line = f[index]
         line = ignoreComments(line)
@@ -585,9 +718,35 @@ def main(path):
         index += 1
 
 
+def debugMode():
+    global debug
+    debug = True
+
+
 if __name__ == "__main__":
     global args
+
+    global debug
+    debug = False
+
     args = sys.argv
-    main(args[1])
+    args.pop(0)
+    
+    index = 0
+    while index < len(args):
+        arg = args[index]
+        if arg in flags:
+            eval(flags[arg])
+
+            args.pop(index)
+            index -= 1
+
+        index += 1
+
+    if len(args) != 1:
+        print("Invalid flags")
+        exit()
+
+    main(args[0])
 
     exit()
