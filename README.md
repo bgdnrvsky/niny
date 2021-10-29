@@ -11,6 +11,10 @@ Extension *".nn"*
 
 [Syntax highlighting](https://github.com/krontzo/niny.vim)
 
+# Flags
+- Flag **"-d, --debug"** for **debug mode**. In this mode you will see the
+  stack after almost each operation.
+
 # Examples
 *Hello world*
 
