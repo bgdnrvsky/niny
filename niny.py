@@ -1,579 +1,228 @@
 #!/usr/bin/python3
 import sys
-sys.setrecursionlimit(10**8)
+sys.setrecursionlimit(10 ** 8)
 
 commands = {
-    "push": "push(line)",
-    "del": "deleteM(line)",
-    "add": "add()",
-    "sub": "sub()",
-    "mult": "mult()",
-    "pow": "powS()",
-    "root": "root()",
-    "div": "div()",
-    "type": "getType()",
-    "or": "logicOr()",
-    "not": "logicNot()",
-    "and": "logicAnd()",
-    '==': "logicEquals()",
-    '<': "logicLessThan()",
-    '>': "logicGreaterThan()",
-    "pop": "popS(index)",
-    "dup": "dup()",
-    "divmod": "divmode()",
-    "dump": "dump(line)",
-    "inp": "inp()",
-    "full": "full()",
-    "if": "condition(index)",
-    "get": "getVal(line)",
-    "swp": "swp()",
-    "macro": "macro()",
-    "rev": "reverse()",
-    "int": "typecastInt()",
-    "bool": "typecastBool()",
-    "float": "typecastFloat()",
-    "string": "typecastString()",
-    "list": "typecastList()",
-    "id": "getIndex()",
-    "flat": "flatten()",
-    "append": "appendTo()",
-    "insert": "insertTo()",
-    "len": "getLength()",
+    # Basic commands for working with stack
+    "full": "full(index)",
+    "push": "push(line, index)",
+    "dump": "dump(line, index)",
+    "dup": "duplicateItemInStack(line, index)",
+    "pop": "popFromStack(line, index)",
+    "swp": "swapElsInStack(line, index)",
+    "change": "changePlaces(line, index)",
+    "rev": "reverseStack(index)",
+    "len": "stackLength()",
+
+    # Arithmetic commands
+    "add": "arithmeticAddition(line, index)",
+    "sub": "arithmeticSubstraction(line, index)",
+    "mult": "arithmeticMultiplication(line, index)",
+    "div": "arithmeticDivision(line, index)",
+    "pow": "arithmeticExponentiation(line, index)",
+    "root": "arithmeticRoot(line, index)",
+    "divmod": "arithmeticRemainderDivision(line, index)",
+
+    # Logic commands
+    "if": "logicIf(line, index)",
+    "or": "logicOr(line, index)",
+    "and": "logicAnd(line, index)",
+    "not": "logicNot(line, index)",
+    "==": "logicEquals(line, index)",
+    '<': "logicGreaterThan(line, index)",
+    '>': "logicLessThan(line, index)",
+
+    # Typecasting commands
+    "type": "getType(line, index)",
+    "int": "typecastToInt(index)",
+    "bool": "typecastToBool(line, index)",
+    "float": "typecastToFloat(line, index)",
+    "string": "typecastToString(line, index)",
+    "list": "typecastToList(line, index)",
+
+    # Commands for working with arrays
+    "append": "appendTo(line, index)",
+    "insert": "insertTo(line, index)",
+    "id": "getIndex(line, index)",
+    "flat": "flatList(line, index)",
+
+    # Other commands
+    "inp": "getInput()",
+    "get": "getItem(line, index)",
+
+    # Commands for operations with macros
+    "macro": "createMacro(line, index)",
+    "del": "deleteMacro(line, index)",
 }
 
 flags = {
     "-d": "debugMode()", "--debug": "debugMode()",
+    "-ndms": "ignoreDebugMessages()", "--ignoredebugmsgs": "ignoreDebugMessages()",
 }
 
 
-def typecastInt():
+# Functions for basic commands
+def full(index):
+    """ Command for printing current stack condition """
     global stack
-    stack[-1] = int(stack[-1])
+    global debug
+    
+    if debug:
+        print(index + 1, ": ", sep='', end='')
+
+    print(stack)
 
 
-def typecastBool():
+def push(line, index):
+    """ Command for appending value to the stack """
     global stack
-    stack[-1] = bool(stack[-1])
-
-
-def typecastFloat():
-    global stack
-    stack[-1] = float(stack[-1])
-
-
-def typecastString():
-    global stack
-    stack[-1] = str(stack[-1])
-
-
-def typecastList():
-    global stack
-    stack[-1] = list(stack[-1])
-
-
-def appendTo():
     global debug
 
-    checkStack(2)
+    line_copy = line # Need this for throwing ann error
 
-    item = stack.pop()
-    if type(stack[-1]) != list:
-        errorWithLine("Can only append to object with type \"list\"")
+    line = line.strip().split(' ')
 
-    stack[-1].append(item)
+    line.pop(0)  # Removing the command itself
+    line = ' '.join(line)
+
+    if line == '':
+        errorWithLine("Invalid command structure", line_copy, index)
+    
+    del line_copy
+    stack.append(eval(line))
 
     if debug:
-        full()
+        full(index)
 
 
-def insertTo():
-    global debug
+def dump(line, index):
+    """ Command for printing the last item in stack """
+    checkStack(1, line, index)
 
-    checkStack(1)
+    line = line.strip().split(' ')
 
-    line = f[index]
-    line = ignoreComments(line)
-    line = line.strip()
-    line = line.split(' ')
+    line.pop(0)  # Removing the command itself
+    line = ' '.join(line)
 
-    line.pop(0)
-
-    if line[0] == '+':
-        checkStack(2)
-
-        in_ = stack.pop()
+    if len(line) == 0:
+        ending = ''
     else:
-        in_ = eval(line[0])
-    if type(in_) != int:
-        errorWithLine("Can only insert to index with type \"int\"")
+        ending = eval(line)
 
-    item = stack.pop()
-    stack.insert(in_, item)
-
-    if debug:
-        full()
+    print(stack[-1], end=ending)
 
 
-def getIndex():
-    global debug
-
-    global stack, index
-
-    checkStack(1)
-
-    line = f[index]
-    line = ignoreComments(line)
-    line = line.strip()
-    line = line.split(' ')
-
-    if len(line) != 2:
-        errorWithLine("Wrong command structure")
-
-    line.pop(0)
-
-    if line[0] == '+':
-        checkStack(2)
-
-        in_ = stack.pop()
-    else:
-        in_ = eval(line[0])
-
-    del line
-
-    if type(in_) != int:
-        errorWithLine("Can only get index with type \"int\"")
-
-    a = stack[-1]
-    if type(a) != list:
-        errorWithLine("Can only get index of objects with type \"list\"")
-
-    stack.append(a[in_])
-
-    if debug:
-        full()
-
-
-def getLength():
-    global stack
-    stack.append(len(stack))
-
-
-def errorWithLine(msg):
-    line = f[index]
-
-    print(msg)
-    print(f"Line {index + 1}\n-> ", end='')
-    print(line, end='')
-
-    exit()
-
-
-def checkStack(length):
-    if len(stack) < length:
-        errorWithLine("Not enough elements in stack")
-
-
-def is_array(array):
-    return type(array) == list
-
-
-def flat_list(array):
-    result = []
-
-    for item in array:
-        if is_array(item):
-            result.extend(flat_list(item))
-        else:
-            result.append(item)
-
-    return result
-
-
-def flatten():
-    global debug
+def duplicateItemInStack(line, index):
+    """ Command for duplicating last element in stack """
+    checkStack(1, line, index)
 
     global stack
-
-    if type(stack[-1]) != list:
-        errorWithLine("Can only flat objects with \"list\" type")
-
-    a = stack.pop()
-    stack.extend(flat_list(a))
-
-    if debug:
-        full()
-
-
-def reverse():
     global debug
-
-    global stack
-    stack = stack[::-1]
-
-    if debug:
-        full()
-
-
-def full():
-    if len(stack) == 0:
-        print([])
-        return
-
-    length = len(stack)
-    for index in range(length):
-        print(stack[index], end='')
-        if index != length - 1:
-            print(", ", end='')
-
-    print()
-
-
-def logicAnd():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(1 if a == 1 and b == 1 else 0)
-
-    if debug:
-        full()
-
-
-def logicEquals():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(1 if a == b else 0)
-
-    if debug:
-        full()
-
-
-def logicLessThan():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(1 if a < b else 0)
-
-    if debug:
-        full()
-
-
-def logicGreaterThan():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(1 if a > b else 0)
-
-    if debug:
-        full()
-
-
-def logicNot():
-    global debug
-
-    checkStack(1)
-
-    cond = stack.pop()
-    if cond == 1:
-        stack.append(0)
-    else:
-        stack.append(1)
-
-    if debug:
-        full()
-
-
-def logicOr():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(1 if a == 1 or b == 1 else 0)
-
-    if debug:
-        full()
-
-
-def getType():
-    global debug
-
-    checkStack(1)
-
-    a = stack.pop()
-    type_ = type(a)
-
-    if type_ == int:
-        stack.append("int")
-    elif type_ == str:
-        stack.append("str")
-    elif type_ == float:
-        stack.append("float")
-    elif type_ == list:
-        stack.append("list")
-
-    if debug:
-        full()
-
-
-def condition(index):
-    checkStack(1)
-
-    line = f[index]
-    line = ignoreComments(line)
-
-    header = line.split()
-    length = len(header)
-
-    if length == 6:
-        cond_true = header[2]
-        cond_false = header[5]
-
-        if cond_true not in macros or cond_false not in macros:
-            errorWithLine("Invalid macros in condition")
-
-        cond = stack.pop()
-
-        if cond == 1:
-            runMacro(cond_true)
-        else:
-            runMacro(cond_false)
-
-    elif length == 3:
-        cond_true = header[2]
-
-        if cond_true not in macros:
-            errorWithLine("Invalid macros in condition")
-
-        cond = stack.pop()
-
-        if cond == 1:
-            runMacro(cond_true)
-
-    else:
-        errorWithLine("Wrong condition structure")
-
-
-def divmode():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    first, second = divmod(a, b)
-
-    stack.append(first)
-    stack.append(second)
-
-    if debug:
-        full()
-
-
-def root():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(a ** (1 / b))
-
-    if debug:
-        full()
-
-
-def powS():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(a ** b)
-
-    if debug:
-        full()
-
-
-def dup():
-    global debug
-
-    checkStack(1)
 
     stack.append(stack[-1])
 
     if debug:
-        full()
+        full(index)
 
 
-def inp():
-    inp_ = input()
+def popFromStack(line, index):
+    """ Command for removing element in stack by it's index """
+    checkStack(1, line, index)
 
-    try:
-        stack.append(eval(inp_))
-    except NameError:
-        try:
-            inp_ += "\""
-            inp_ = inp_[::-1]
-            inp_ += "\""
-            inp_ = inp_[::-1]
-        except NameError:
-            stack.append(eval(inp_))
-            return
-
-        stack.append(eval(inp_))
-
-
-def getVal(line, index=-1):
+    global stack
     global debug
 
-    checkStack(1)
-
-    length = len(line)
-    if length == 1:
-        pass
-    elif length == 2:
-        if line[1] == '+':
-            checkStack(2)
-
-            index = stack.pop()
-        else:
-            index = eval(line[1])
-    else:
-        errorWithLine("Syntax Error")
-
-    if type(index) != int:
-        errorWithLine("Int type should be provided for getting the element in stack")
-
-    stack.append(stack[index])
-
-    if debug:
-        full()
-
-
-def macro():
-    global index
-
-    header = f[index]
-    header = ignoreComments(header)
-    header = header.split()
-
-    if len(header) != 3:
-        errorWithLine("Wrong macro header")
-
-    name = header[1]
-    keywords = header[0], header[2]
-
-    if keywords != ("macro", "do"):
-        print("Wrong macro header")
-        errorWithLine("Wrong macro header")
-
-    del keywords
-
-    start_index = index
-    index += 1
-
-    while True:
-        body = f[index].strip()
-
-        if body == "end":
-            macros[name] = (start_index + 1, index - 1)
-            break
-
-        index += 1
-
-
-def ignoreComments(line):
-    if '$' not in line:
-        return line
-
-    return line[:line.index('$')]
-
-
-def popS(index):
-    global debug
-
-    checkStack(1)
-
-    line = f[index]
-    line = ignoreComments(line)
-    line = line.strip()
-    line = line.split()
+    line = line.strip().split(' ')
 
     if len(line) == 1:
-        in_ = -1
+        indexForRemoving = -1 # For removing last element from stack
     elif len(line) == 2:
-        line.pop(0)
-        in_ = line[0]
-        if in_ == '+':
-            checkStack(2)
-
-            in_ = stack.pop()
+        line.pop(0) # Removing the command itself
+        indexForRemoving = line[0]
+        
+        if indexForRemoving == '+': # In this case, index for removing will be taken from last element in stack
+            checkStack(2, line, index)
+            indexForRemoving = stack.pop()
         else:
-            in_ = eval(in_)
-        if type(in_) != int:
-            errorWithLine("Can take index with type \"int\"")
+            indexForRemoving = eval(indexForRemoving)
+
+    stack.pop(indexForRemoving)
+
+    if debug:
+        full(index)
+
+
+def swapElsInStack(line, index):
+    """ Command for changing places of 2 last elements in stack """
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    stack[-1], stack[-2] = stack[-2], stack[-1]
+
+    if debug:
+        full(index)
+
+
+def changePlaces(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    line_copy = line # Need this for throwing ann error
+
+    line = line.strip().split(' ')
+
+    line.pop(0) # Removing command itself
+
+    if line[0] == '+':
+        checkStack(2, line, index)
+        
+        insertIndex = stack.pop()
     else:
-        errorWithLine("Wrong command structure")
+        insertIndex = eval(line[0])
 
-    stack.pop(in_)
+    if type(insertIndex) != int:
+        errorWithLine("Can only insert to index with type \"int\"")
 
-    if debug:
-        full()
+    item = stack.pop()
 
-
-def push(line):
-    global debug
-
-    line.pop(0)
-
-    line = ' '.join(line)
-    line = line.strip()
-
-    if line == '':
-        errorWithLine("Invalid command structure")
-
-    stack.append(eval(line))
+    stack.insert(insertIndex, item)
 
     if debug:
-        full()
+        full(index)
+
+    del line_copy
 
 
-def deleteM(line):
-    line.pop(0)
-
-    line = ' '.join(line)
-    line = line.strip()
-
-    del macros[line]
-
-
-def add():
+def reverseStack(index):
+    global stack
     global debug
 
-    checkStack(2)
+    stack = stack[::-1]
+
+    if debug:
+        full(index)
+
+
+def stackLength():
+    global stack
+    global debug
+
+    stack.append(len(stack))
+
+    if debug:
+        full(index)
+
+
+# Functions for arithmetic commands
+def arithmeticAddition(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
 
     a = stack.pop()
     b = stack.pop()
@@ -581,41 +230,14 @@ def add():
     stack.append(a + b)
 
     if debug:
-        full()
+        full(index)
 
 
-def mult():
+def arithmeticSubstraction(line, index):
+    checkStack(2, line, index)
+
+    global stack
     global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(a * b)
-
-    if debug:
-        full()
-
-
-def div():
-    global debug
-
-    checkStack(2)
-
-    a = stack.pop()
-    b = stack.pop()
-
-    stack.append(a / b)
-
-    if debug:
-        full()
-
-
-def sub():
-    global debug
-
-    checkStack(2)
 
     a = stack.pop()
     b = stack.pop()
@@ -623,116 +245,678 @@ def sub():
     stack.append(a - b)
 
     if debug:
-        full()
+        full(index)
 
 
-def swp():
+def arithmeticMultiplication(line, index):
+    checkStack(2, line, index)
+
+    global stack
     global debug
 
-    checkStack(2)
+    a = stack.pop()
+    b = stack.pop()
 
-    stack[-1], stack[-2] = stack[-2], stack[-1]
+    stack.append(a * b)
 
     if debug:
-        full()
+        full(index)
 
 
-def dump(line, ending=''):
-    checkStack(1)
+def arithmeticDivision(line, index):
+    checkStack(2, line, index)
 
-    line.pop(0)
-    line = ' '.join(line)
-    line = line.strip()
-
-    if len(line) != 0:
-        line = eval(line)
-
-    print(stack[-1], end=line)
-
-
-def runMacro(com_name):
+    global stack
     global debug
 
-    start_index, stop_index = macros[com_name]
+    a = stack.pop()
+    b = stack.pop()
+
+    stack.append(a / b)
+
+    if debug:
+        full(index)
+
+
+def arithmeticExponentiation(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    a = stack.pop()
+    b = stack.pop()
+
+    stack.append(a ** b)
+
+    if debug:
+        full(index)
+
+
+def arithmeticRoot(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    a = stack.pop()
+    b = stack.pop()
+
+    stack.append(a ** (1 / b))
+
+    if debug:
+        full(index)
+
+
+def arithmeticRemainderDivision(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    a = stack.pop()
+    b = stack.pop()
+
+    stack.extend(divmod(a, b))
+    
+    if debug:
+        full(index)
+
+
+# Functions for logic commands
+def logicIf(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    line_copy = line # Need this for throwing ann error
+
+    if debug:
+        print(f"{index + 1}: Inside the condition'")
+
+    header = line.strip().split()
+    length = len(header)
+
+    if length == 6: # if do macro_true else do macro_false
+        macro_true = header[2]
+        macro_false = header[5]
+
+        if macro_true not in macros or macro_false not in macros:
+            errorWithLine("Undefined macros in condition", line_copy, index)
+
+        condition = stack.pop()
+
+        if condition == 1: # True
+            if debug:
+                print("The condition result is True")
+                full(index)
+
+            runMacro(macro_true, line)
+        elif condition == 0: # False
+            if debug:
+                print("The condition result is False")
+                full(index)
+
+            runMacro(macro_false, line)
+
+        else:
+            errorWithLine("Wrong input for \"if\" structure, should be 1(true) or 0(false)")
+        
+
+    elif length == 3: # if do macro_true
+        macro_true = header[2]
+
+        if macro_true not in macros:
+            errorWithLine("Undefined macro in condition", line, index)
+
+        condition = stack.pop()
+
+        if condition == 1: # True
+            if debug:
+                print("The condition is True")
+                full(index)
+
+            runMacro(macro_true, line)
+
+    else:
+        errorWithLine("Wrong condition structure", line, index)
+
+    del line_copy
+
+
+def logicOr(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    line_copy = line # Need this for throwing ann error
+
+    condition1 = stack.pop()
+    condition2 = stack.pop()
+
+    if condition1 not in [0, 1] or condition2 not in [0, 1]:
+        errorWithLine("Wrong input for \"or\" structure, should be 1(true) or 0(false)")
+
+    stack.append(1 if condition1 or condition2 else 0)
+
+    if debug:
+        full(index)
+
+    del line_copy
+
+
+def logicAnd(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    line_copy = line # Need this for throwing ann error
+
+    condition1 = stack.pop()
+    condition2 = stack.pop()
+
+    if condition1 not in [0, 1] or condition2 not in [0, 1]:
+        errorWithLine("Wrong input for \"and\" command, should be 1(true) or 0(false)")
+
+    stack.append(condition1 and condition2)
+
+    if debug:
+        full(index)
+
+    del line_copy
+
+
+def logicNot(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    line_copy = line # Need this for throwing ann error
+
+    condition1 = stack.pop()
+
+    if condition1 not in [0, 1]:
+        errorWithLine("Wrong input for \"not\" command, should be 1(true) or 0(false)")
+
+    stack.append(not condition1)
+    stack[-1] = 0 if stack[-1] == False else 1
+
+    if debug:
+        full(index)
+
+    del line_copy
+
+def logicEquals(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    item1 = stack.pop()
+    item2 = stack.pop()
+
+    stack.append(1 if item1 == item2 else 0)
+
+    if debug:
+        full(index)
+
+
+def logicGreaterThan(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    item1 = stack.pop()
+    item2 = stack.pop()
+
+    stack.append(0 if item1 > item2 else 1)
+
+    if debug:
+        full(index)
+
+
+def logicLessThan(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    item1 = stack.pop()
+    item2 = stack.pop()
+
+    stack.append(0 if item1 < item2 else 1)
+
+    if debug:
+        full(index)
+
+
+# Functions for typecasting commands
+def getType(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    item = stack.pop()
+    typeOfItem = type(item)
+
+    if typeOfItem == int:
+        stack.append("int")
+    elif typeOfItem == str:
+        stack.append("str")
+    elif typeOfItem == float:
+        stack.append("float")
+    elif typeOfItem == list:
+        stack.append("list")
+
+    if debug:
+        full(index)
+
+
+def typecastToInt(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    item = stack.pop()
+    
+    stack.append(int(item))
+
+    if debug:
+        full(index)
+
+
+def typecastToBool(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    item = stack.pop()
+
+    stack.append(bool(item))
+
+    if debug:
+        full(index)
+
+
+def typecastToFloat(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    item = stack.pop()
+
+    stack.append(float(item))
+
+    if debug:
+        full(index)
+
+
+def typecastToString(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    item = stack.pop()
+
+    stack.append(str(item))
+
+    if debug:
+        full(index)
+
+
+def typecastToList(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    item = stack.pop()
+
+    stack.append(list(item))
+
+    if debug:
+        full(index)
+
+# Functions for working with arrays
+def appendTo(line, index):
+    checkStack(2, line, index)
+
+    global stack
+    global debug
+
+    item = stack.pop()
+
+    if type(stack[-1]) != list:
+        errorWithLine("Can only append to object with type \"list\"", line, index)
+
+    stack[-1].append(item)
+
+    if debug:
+        full(index)
+
+
+
+def insertTo(line, index):
+    checkStack(3, line, index)
+
+    global stack
+    global debug
+
+    indexToInsert = stack.pop()
+    item = stack.pop()
+
+    if type(stack[-1]) != list:
+        errorWithLine("Can only insert to object with type \"list\"", line, index)
+
+    if type(indexToInsert) != int:
+        errorWithLine("Can only insert to object with index type of \"int\"", line, index)
+
+    stack[-1].insert(indexToInsert, item)
+
+    if debug:
+        full(index)
+
+
+def getIndex(line, index):
+    """ Command for getting element in an array by it's index """
+    checkStack(1, line, index)
+    global stack
+    global debug
+
+    line_copy = line # Need this for throwing ann error
+
+    line = line.strip().split(' ')
+
+    line.pop(0) # Removing the command itself
+
+    if line[0] == '+':
+        checkStack(2, line, index)
+
+        indexToGet = eval(stack.pop())
+    else:
+        indexToGet = eval(line[0])
+    
+    if type(stack[-1]) != list:
+        errorWithLine("Can only get an element of type \"list\"", line, index)
+
+    stack.append(stack[-1][indexToGet])
+
+    if debug:
+        full(index)
+
+    del line_copy
+
+
+def flatten(array):
+    result = []
+
+    for item in array:
+        if type(item) == list:
+            result.extend(flatten(item))
+        else:
+            result.append(item)
+
+    return result
+
+
+def flatList(line, index):
+    checkStack(1, line, index)
+
+    global stack
+    global debug
+
+    stack.extend(flatten(stack.pop()))
+
+    if debug:
+        full(index)
+
+
+# Other commands 
+def getInput():
+    user_input = input()
+
+    try:
+        stack.append(eval(user_input))
+    except (NameError, SyntaxError):
+        # In case when user enters a string
+        user_input += "\""
+        user_input = user_input[::-1]
+
+        user_input += "\""
+        user_input = user_input[::-1]
+
+    stack.append(eval(user_input))
+
+
+def getItem(line, index):
+    """ Function for getting an item in stack by it's index """
+    global stack
+    global debug
+
+    line_copy = line
+
+    line = line.strip().split(' ')
+
+    line.pop(0) # Removing the command itself
+
+    if line == []:
+        indexToGet = -1
+    elif line[0] == '+':
+        checkStack(1, line, index)
+
+        indexToGet = stack.pop()
+    else:
+        indexToGet = eval(line[0])
+    
+    if type(indexToGet) != int:
+        errorWithLine("Can only get item in stack with index type of \"int\"", line_copy, index)
+
+    stack.append(stack[indexToGet])
+
+    if debug:
+        full(index)
+
+    del line_copy
+
+
+# Macro functions
+def createMacro(line, index): 
+    global debug
+    global document, macros
+    global line_index
+    
+    header = line.strip().split(' ')
+
+    if len(header) != 3:
+        errorWithLine("Wrong macro header", line, index)
+
+    name = header[1]
+    keywords = header[0], header[2] # For checking the structure
+
+    if debug:
+        print(f"Definition of \"{name}\" macro")
+
+    if keywords != ("macro", "do"):
+        errorWithLine("Invalid macro header", line, index)
+
+    del keywords
+
+    start_index = index + 1
+
+    while True:
+        body = ignoreComments(document[index + 1])
+
+        if body.strip() == "end":
+            macros[name] = (start_index, index)
+            break
+        
+        index += 1
+
+    line_index = index + 1
+
+    if debug:
+        print(macros)
+
+
+def runMacro(name, line):
+    global debug
+    global macros, document
+
+    if debug:
+        print(f"Running macro {name}")
+
+    if name not in macros:
+        errorWithLine("Undefined macro", line, index)
+
+    start_index, stop_index = macros[name]
 
     while start_index <= stop_index:
-        m_line = f[start_index]
-        m_line = ignoreComments(m_line)
-        m_line = m_line.strip()
+        m_line = ignoreComments(document[start_index])
 
-        if len(m_line) == 0:
-            start_index += 1
-            continue
+        if len(m_line.strip()) != 0:
+            execLine(m_line, start_index)
 
-        execLine(m_line, start_index)
         start_index += 1
 
     if debug:
-        full()
+        full(index)
 
 
-def execLine(line, index):
-    line = line.strip()
-    line = line.split()
-
-    com_name = line[0]
-
-    if com_name in commands:
-        eval(commands[com_name])
-    else:
-        if com_name in macros:
-            runMacro(com_name)
-        else:
-            errorWithLine("Unknown command")
-
-
-def main(path):
-    filename = path.split('/')[-1]
-    if filename.split('.')[-1] != "nn":
-        print("Invalid file extension")
-        exit()
-
-    global f, stack, macros
-    stack = []
-    macros = {}
-    f = open(path).readlines()
-
-    global index
-    index = 0
-
+def deleteMacro(line, index):
     global debug
+    global macros
+
+    line = line.strip().split(' ')
+
+    line.pop(0) # Removing the command itself
+    
+    if len(line) != 1:
+        errorWithLine("Wrong command structure", line, index)
+
+    name = line[0]
+
+    if name not in macros:
+        errorWithLine("Undefined macro", line, index)
+
+    del macros[name]
 
     if debug:
-        full()
-
-    while index < len(f):
-        line = f[index]
-        line = ignoreComments(line)
-        line = line.strip()
-
-        if len(line) == 0:
-            index += 1
-            continue
-
-        execLine(line, index)
-        index += 1
+        print(macros)
 
 
+# Flags functions
 def debugMode():
+    """ Turning on the debug mode """
     global debug
+    global ignoreDebugMessage
+
+    if not ignoreDebugMessage:
+        print("DEBUG MODE")
+        print("FORMAT: line_number: stack_condition")
+
     debug = True
 
 
+def ignoreDebugMessages():
+    global ignoreDebugMessage
+
+    ignoreDebugMessage = True
+
+
+# Basic functions
+def checkStack(length, line, index):
+    """ Basic function for checking amount of items in stack """
+    global stack
+
+    if len(stack) < length:
+        errorWithLine("Not enough elements in stack", line, index)
+        exit()
+
+
+def ignoreComments(line):
+    return line if '$' not in line else line[:line.index('$')]
+
+
+def errorWithLine(message, line, index):
+    """ Basic function for throwing errors """
+    print(message)
+    print(f"Line {index + 1}\n-> ", end='')
+    print(line, end='')
+
+    exit()
+
+
+def execLine(line, index):
+    """ Main line computing func """
+    command_name = line.strip().split(' ')[0]  # Getting main command through extra spaces
+
+    if command_name in commands:
+        eval(commands[command_name])
+    elif command_name in macros:
+        runMacro(command_name, line)
+    else:
+        errorWithLine("Invalid command", line, index)
+
+
+def main(path):
+    # Checking for the right file extension
+    filename = path.split('/')[-1]
+    if filename.split('.')[1] != "nn":
+        print("Invalid file extension")
+        usage()
+
+    global document, stack, macros  # Some basic structures
+
+    document = open(path).readlines()
+    stack = []
+    macros = {}  # Pattern - {"macro_name": (header_index, end_index)}
+
+    # Reading the file
+    global line_index
+
+    line_index = 0
+
+    while line_index < len(document):
+        line = ignoreComments(document[line_index])
+
+        if len(line.strip()) != 0:
+            execLine(line, line_index)
+
+        line_index += 1
+
+
+def usage():
+    print("Usage: python3 niny.py [-d | --debug] [filename]")
+    print("Some arguments:")
+    print("-d, --debug\tTo turn on debug mode, after this you will see stack condition after almost each operation, that affects stack.")
+    print("-ndms, --ignoredebugmsgs\tTo turn off the debug startup message.")
+    
+    exit()
+
+
 if __name__ == "__main__":
-    global args
+    args = sys.argv
+    args.pop(0) # Removing python file
 
     global debug
-    debug = False
+    debug = False # Debug mode
 
-    args = sys.argv
-    args.pop(0)
-    
+    global ignoreDebugMessage
+    ignoreDebugMessage = False # Mode for ignoring debug startup message
+
+    # Going through the launch arguments
     index = 0
+
     while index < len(args):
         arg = args[index]
         if arg in flags:
@@ -743,10 +927,9 @@ if __name__ == "__main__":
 
         index += 1
 
-    if len(args) != 1:
+    if len(args) != 1:  # Must contain only name of file, but I think I will remove this dumb check in future
         print("Invalid flags")
-        exit()
+        usage()
 
     main(args[0])
-
     exit()
