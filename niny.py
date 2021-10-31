@@ -361,7 +361,7 @@ def logicIf(line, index):
             runMacro(macro_false, line)
 
         else:
-            errorWithLine("Wrong input for \"if\" structure, should be 1(true) or 0(false)")
+            errorWithLine("Wrong input for \"if\" structure, should be 1(true) or 0(false)", line, index)
         
 
     elif length == 3: # if do macro_true
