@@ -318,6 +318,8 @@ Extension *".nn"*
       push 3 $ stack = [3]
       push 6 $ stack = [3, 6]
       push 5 $ stack = [3, 6, 5]
+
+      mult $ stack = [3, 30]
       
 - Command **"div"** for **arithmetic division** of two last elements in stack, **appends the result to end of the stack**, **requires at least 2 elements in stack**. 
 
