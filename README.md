@@ -285,7 +285,7 @@ Extension *".nn"*
 - Command **"len"** for **getting length of a stack**
 
 - Command **"memory"** for **changing current stack**.
-- 
+
   *Note: default stack is **"main"***
 
   *Example:*
