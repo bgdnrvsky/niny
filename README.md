@@ -1,4 +1,5 @@
 
+
 # Niny
 **Stack-oriented programming language, with Python under the hood**
 
@@ -174,7 +175,9 @@ Extension *".nn"*
 # Docs
 
  - Use **"$"** sign for **commenting**.
- ## Basic commands for working with stack
+
+## Basic commands for working with stack
+
  - Command **"full"** for **printing full stack**.
 
    *Note: prints "[]" if stack is empty*.
@@ -280,6 +283,23 @@ Extension *".nn"*
       $ [3, 2, 1]
 
 - Command **"len"** for **getting length of a stack**
+
+- Command **"memory"** for **changing current stack**.
+- 
+  *Note: default stack is **"main"***
+
+  *Example:*
+
+	  push 1
+      push 2
+      push 3
+      full $ OUT: [1, 2, 3]
+      
+	  memory additional $ Now you changed your stack to "additiona"
+	  push 4
+	  push 5
+	  push 6
+	  full $ OUT: [4, 5, 6]
 
 ## Arithmetic commands
 
