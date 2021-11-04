@@ -835,6 +835,13 @@ def createMacro(line, index):
         errorWithLine("Wrong macro header", line, index)
 
     name = header[1]
+
+    try:
+        int(name)
+        errorWithLine("Macro name can't be a number", line, index)
+    except ValueError:
+        pass
+
     keywords = header[0], header[2]  # For checking the structure
 
     if debug:
